@@ -9,6 +9,12 @@ public class Main {
         } else {
             System.out.println("Error al conectar a la base de datos");
         }
+
+        javax.swing.SwingUtilities.invokeLater(() -> {
+            VentanaSwing ventana = new VentanaSwing();
+            ventana.setVisible(true);
+        });
+
     }
 
 }
