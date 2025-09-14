@@ -9,12 +9,15 @@ public class Main {
         } else {
             System.out.println("Error al conectar a la base de datos");
         }
+        UsuarioDao UsuarioDao = new  UsuarioDao();
+        // Insertar usurio
+        Usuario nuevo = new Usuario(0,"Pedro","Sanchez","Pedro@gmail.com");
+        UsuarioDao.agregarUsuario(nuevo);
 
-        javax.swing.SwingUtilities.invokeLater(() -> {
-            VentanaSwing ventana = new VentanaSwing();
-            ventana.setVisible(true);
-        });
-
+        // Lista de usuario 
+        for (Usuario u : UsuarioDao.listaRUsuarios()){
+            System.out.println(u.getid_Usuario()+" - " + u.getNombre()+ " " + u.getApellido());
+        }
     }
 
 }

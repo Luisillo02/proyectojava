@@ -1,6 +1,6 @@
 import java.sql.Date;
 
-public class tareas {
+public class Tareas {
     private int id_tarea;
     private String nombre;
     private String descripcion;
@@ -9,12 +9,12 @@ public class tareas {
     private boolean estado;
 
 // Constructor de la clase tareas
-public tareas() {}
+public Tareas() {}
 
 
 // Constructor con Parametros
 
-public tareas(int id_tarea,String nombre,String descripcion,String frecuencia,Date Ultima_fecha_realizada,boolean estado) {
+public Tareas(int id_tarea,String nombre,String descripcion,String frecuencia,Date Ultima_fecha_realizada,boolean estado) {
     this.id_tarea = id_tarea;
     this.nombre = nombre;
     this.descripcion = descripcion;
