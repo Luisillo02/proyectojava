@@ -54,7 +54,7 @@ public class TareasDao{
 
     // UPDATE - actualizar tarea
     public void actualizarTareas(Tareas tareas){
-        String sql = "UPDATE tarea SET nombre = ?, descripcion = ?, frecuencia = ?, Ultima_fecha_realiza = ?, estado = ?";
+        String sql = "UPDATE tarea SET nombre = ?, descripcion = ?, frecuencia = ?, Ultima_fecha_realizada = ?, estado = ?,WHERE id_tarea = ?";
         try(Connection conn = ConectorBD.getConnection();
          PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setString(1, tareas.getnombre());
