@@ -5,7 +5,7 @@ import java.util.List;
 public class AsignacionDao {
     // CREATE - agregar asignacion
     public void agregarAsignacion(Asignacion asignacion) {
-        String sql = "INSERT INTO asignacion(id_usuario, id_tarea, fecha_asignacion, fecha_realizacion,estado, WHERE id_asignacion) VALUES(?, ?, ?, ?, ?,?)";
+        String sql = "INSERT INTO asignacion(id_usuario, id_tarea, fecha_asignacion, fecha_realizacion,estado ) VALUES(?, ?, ?, ?, ?,)";
         try (Connection conn = ConectorBD.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
 
@@ -14,7 +14,7 @@ public class AsignacionDao {
             ps.setDate(3, asignacion.getfecha_asignacion());
             ps.setDate(4, asignacion.getfecha_realizacion());
             ps.setString(5, asignacion.getestado());
-            ps.setInt(6, asignacion.getid_asignacion());
+            
 
 
             ps.executeUpdate();
@@ -61,9 +61,9 @@ public class AsignacionDao {
             ps.setInt(1, asignacion.getid_usuario());
             ps.setInt(2, asignacion.getid_tarea());
             ps.setDate(3, asignacion.getfecha_asignacion());
-            ps.setInt(4, asignacion.getid_asignacion());
-            ps.setDate(5, asignacion.getfecha_realizacion());
-            ps.setString(6, asignacion.getestado());    
+            ps.setDate(4, asignacion.getfecha_realizacion());
+            ps.setString(5, asignacion.getestado());
+            ps.setInt(6, asignacion.getid_asignacion());    
 
             ps.executeUpdate();
             System.out.println("Asignacion actualizada");

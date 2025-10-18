@@ -45,7 +45,7 @@ public class HogarDao {
 
 // UPDATE - actualizar Hogar
     public void actualizarHogar(Hogar hogar){
-        String sql = "UPDATE hogar SET nombre=?, direccion=?, WHERE id_hogar= ?";
+        String sql = "UPDATE hogar SET nombre=?, direccion=?  WHERE id_hogar= ?";
         try(Connection conn = ConectorBD.getConnection();
         PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setString(1,hogar.getNombre());
@@ -62,7 +62,7 @@ public class HogarDao {
 // opcion DELETE- eliminar Hogar por id 
 
 public void eliminarHogar(int id){
-    String sql = "DELETE FROM hogar WHERE id_hogar";
+    String sql = "DELETE FROM hogar WHERE id_hogar = ?";
     try (Connection conn = ConectorBD.getConnection();
     PreparedStatement ps = conn.prepareStatement(sql)) {
         ps.setInt(1, id);
