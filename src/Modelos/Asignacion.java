@@ -1,5 +1,6 @@
-import java.sql.Date;
+package Modelos;
 
+import java.sql.Date;
 public class Asignacion {
     private  int id_asignacion;
     private int id_usuario;

@@ -1,3 +1,7 @@
+package Ventanas;
+import DAOs.UsuarioDao;
+import Modelos.Usuario;
+
 import javax.swing.*;
 import java.awt.*;
 import java.util.List;

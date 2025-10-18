@@ -1,6 +1,9 @@
+package DAOs;
+
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+import Modelos.Usuario;
 
 public class UsuarioDao {
 

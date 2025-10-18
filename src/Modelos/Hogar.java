@@ -1,3 +1,4 @@
+package Modelos;
 public class Hogar {
     private int id_hogar;
     private String nombre;

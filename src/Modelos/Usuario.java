@@ -1,4 +1,4 @@
-
+package Modelos;
 public class Usuario {
     private int id_Usuario;
     private String nombre;

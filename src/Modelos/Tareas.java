@@ -1,3 +1,4 @@
+package Modelos;
 import java.sql.Date;
 
 public class Tareas {

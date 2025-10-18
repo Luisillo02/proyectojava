@@ -1,6 +1,6 @@
 import java.sql.Connection;
 import java.sql.SQLException;
-
+import DAOs.ConectorBD;
 public class Main {
     public static void main(String[] args) {
         // Usar try-with-resources para asegurar que la conexión se cierre

@@ -1,6 +1,10 @@
+package DAOs;
+ 
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+import Modelos.Hogar;
+
 
 
 public class HogarDao {

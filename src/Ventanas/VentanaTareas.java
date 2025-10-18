@@ -1,3 +1,7 @@
+package Ventanas;
+import DAOs.TareasDao;
+import Modelos.Tareas;
+
 import java.awt.*;
 import java.sql.Date;
 import java.util.List;

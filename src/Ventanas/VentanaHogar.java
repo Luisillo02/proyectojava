@@ -1,3 +1,9 @@
+package Ventanas;
+
+import DAOs.HogarDao;     
+import Modelos.Hogar;
+
+
 import javax.swing.*;
 import java.awt.*;
 import java.util.List;

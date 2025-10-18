@@ -1,3 +1,11 @@
+package Ventanas;
+import DAOs.AsignacionDao;
+import DAOs.UsuarioDao;
+import DAOs.TareasDao;
+import Modelos.Asignacion;
+import Modelos.Usuario;
+import Modelos.Tareas;
+
 import javax.swing.*;
 import java.awt.*;
 import java.sql.Date;
