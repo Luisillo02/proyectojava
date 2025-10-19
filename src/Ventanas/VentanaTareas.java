@@ -1,7 +1,6 @@
 package Ventanas;
 import DAOs.TareasDao;
 import Modelos.Tareas;
-
 import java.awt.*;
 import java.sql.Date;
 import java.util.List;
@@ -41,11 +40,9 @@ public class VentanaTareas extends JPanel {
         panelAgregar.add(campoNombre);
         panelAgregar.add(new JLabel("Descripción:"));
         panelAgregar.add(campoDescripcion);
-        panelAgregar.add(new JLabel("Frecuencia (Ej: Diaria):"));
         panelAgregar.add(new JLabel("Frecuencia:"));
         panelAgregar.add(comboFrecuencia);
-        panelAgregar.add(new JLabel("Estado:"));
-        panelAgregar.add(checkEstado);
+        
         panelAgregar.add(new JLabel(""));
         panelAgregar.add(botonAgregar);
 
@@ -93,8 +90,8 @@ public class VentanaTareas extends JPanel {
             campoNombre.setText("");
             campoDescripcion.setText("");
             campoFrecuencia.setText("");
-            checkEstado.setSelected(true); // Resetear checkbox
-
+            
+            
             actualizarTareas();
         });
 
