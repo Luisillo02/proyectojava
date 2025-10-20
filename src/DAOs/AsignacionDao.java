@@ -7,15 +7,17 @@ import java.util.List;
 public class AsignacionDao {
     // CREATE - agregar asignacion
     public void agregarAsignacion(Asignacion asignacion) {
-        String sql = "INSERT INTO asignacion(id_usuario, id_tarea, fecha_asignacion, fecha_realizacion,estado ) VALUES(?,?,?,?,?)";
+        String sql = "INSERT INTO asignacion(id_usuario, id_tarea,id_hogar, fecha_asignacion, fecha_realizacion,estado ) VALUES(?,?,?,?,?,?)";
         try (Connection conn = ConectorBD.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
 
             ps.setInt(1, asignacion.getid_usuario());
             ps.setInt(2, asignacion.getid_tarea());
-            ps.setDate(3, asignacion.getfecha_asignacion());
-            ps.setDate(4, asignacion.getfecha_realizacion());
-            ps.setString(5, asignacion.getestado());
+            ps.setInt(3,asignacion.getid_hogar());
+            ps.setDate(4, asignacion.getfecha_asignacion());
+            ps.setDate(5, asignacion.getfecha_realizacion());
+            ps.setString(6, asignacion.getestado());
+
             
 
 
@@ -41,6 +43,7 @@ public class AsignacionDao {
                 a.setid_asignacion(rs.getInt("id_asignacion"));
                 a.setid_usuario(rs.getInt("id_usuario"));
                 a.setid_tarea(rs.getInt("id_tarea"));
+                a.setid_hogar(rs.getInt("id_hogar"));
                 a.setfecha_asignacion(rs.getDate("fecha_asignacion"));
                 a.setfecha_realizacion(rs.getDate("fecha_realizacion"));
                 a.setestado(rs.getString("estado"));
@@ -62,6 +65,7 @@ public class AsignacionDao {
          PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setInt(1, asignacion.getid_usuario());
             ps.setInt(2, asignacion.getid_tarea());
+            
             ps.setDate(3, asignacion.getfecha_asignacion());
             ps.setDate(4, asignacion.getfecha_realizacion());
             ps.setString(5, asignacion.getestado());
@@ -84,5 +88,34 @@ public class AsignacionDao {
         } catch (SQLException e) {
             System.err.println("Error: " + e.getMessage());
         }
+    }
+    // --- MÉTODO NUEVO: Para buscar una asignación por su ID ---
+    // (Este método es necesario para el botón Eliminar)
+    public Asignacion buscarAsignacionPorId(int idAsignacion) {
+        String sql = "SELECT * FROM asignacion WHERE id_asignacion = ?";
+        try (Connection conn = ConectorBD.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setInt(1, idAsignacion);
+
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    // Esto necesita el constructor vacío Asignacion()
+                    Asignacion a = new Asignacion(); 
+                    a.setid_asignacion(rs.getInt("id_asignacion"));
+                    a.setid_usuario(rs.getInt("id_usuario"));
+                    a.setid_tarea(rs.getInt("id_tarea"));
+                    a.setid_hogar(rs.getInt("id_hogar")); // Incluye el hogar
+                    a.setfecha_asignacion(rs.getDate("fecha_asignacion"));
+                    a.setfecha_realizacion(rs.getDate("fecha_realizacion"));
+                    a.setestado(rs.getString("estado"));
+                    
+                    return a;
+                }
+            }
+        } catch (SQLException e) {
+            System.err.println("Error al buscar asignación: " + e.getMessage());
+        }
+        return null; // No se encontró
     }
 }

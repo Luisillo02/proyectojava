@@ -1,11 +1,11 @@
 package Ventanas;
 import DAOs.AsignacionDao;
+import DAOs.HogarDao;
 import DAOs.TareasDao;
 import DAOs.UsuarioDao;
 import Modelos.Asignacion;
-import Modelos.Tareas;
-import DAOs.HogarDao;
 import Modelos.Hogar;
+import Modelos.Tareas;
 import Modelos.Usuario;
 import java.awt.*;
 import java.sql.Date;
@@ -17,73 +17,65 @@ import javax.swing.*;
 public class VentanaAsignacion extends JPanel {
 
     private AsignacionDao asignacionDao = new AsignacionDao();
-    // Suponemos que tienes DAOs para Usuarios y Tareas para obtener listas
     private UsuarioDao usuarioDao = new UsuarioDao();
     private TareasDao tareasDao = new TareasDao();
-    private HogarDao hogarDao = new HogarDao();
+    private HogarDao hogarDao = new HogarDao(); // DAO de Hogar
     private JTextArea areaAsignaciones;
-    private JComboBox<String> comboUsuarios; // Para seleccionar usuario
-    private JComboBox<String> comboTareas;   // Para seleccionar tarea
-    private JComboBox<String> comboHogar;   // Para seleccionar Hogar
-    private JTextField campoFechaAsignacion; // Podría ser un JDatePicker si usas librerías externas
-    private JTextField campoFechaRealizacion; // Podría ser un JDatePicker
-   // private JComboBox<String> comboEstado; // Para seleccionar estado
+    private JComboBox<String> comboUsuarios; 
+    private JComboBox<String> comboTareas;   
+    private JComboBox<String> comboHogar;    // Combo de Hogar
+    private JTextField campoFechaAsignacion; 
+    private JTextField campoFechaRealizacion; 
+    private JComboBox<String> comboEstado; // <-- CAMBIO: Re-habilitado (es necesario)
     private JTextField campoIdEliminar;
+    
     public VentanaAsignacion() {
-        setLayout(new BorderLayout());
+        setLayout(new BorderLayout(5, 5));
+        setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
         // --- Panel para agregar ---
-        JPanel panelAgregar = new JPanel(new GridLayout(7, 2, 5, 5)); // Ajustado a 6 filas
-        panelAgregar.setBorder(BorderFactory.createTitledBorder("Agregar/Actualizar Asignación"));
-        panelAgregar.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10)); // Margen
-
+        JPanel panelAgregar = new JPanel(new GridLayout(7, 2, 5, 5)); 
+        panelAgregar.setBorder(BorderFactory.createTitledBorder("Agregar Asignación"));
+        
         comboUsuarios = new JComboBox<>();
         comboTareas = new JComboBox<>();
         comboHogar = new JComboBox<>();
-        
-        campoFechaAsignacion = new JTextField("YYYY-MM-DD"); // Placeholder
-        campoFechaRealizacion = new JTextField("YYYY-MM-DD (opcional)"); // Placeholder
-         // Agrego el Seleccionador de opciones 
-        //String [] opcionesEstado = {"Inactiva","Activa"};
-        //comboEstado = new JComboBox<>(opcionesEstado);
+        campoFechaAsignacion = new JTextField("YYYY-MM-DD"); 
+        campoFechaRealizacion = new JTextField("YYYY-MM-DD (opcional)"); 
 
-        
-        
+        // --- CAMBIO: Lógica de Estado (re-habilitada) ---
+        // El estado de una ASIGNACIÓN es "Pendiente" o "Completada"
+        String [] opcionesEstado = {"Pendiente","Completada"};
+        comboEstado = new JComboBox<>(opcionesEstado);
+
         JButton botonAgregar = new JButton("Agregar Asignación");
-        // Nota: Para actualizar/eliminar necesitarías seleccionar una asignación existente (más complejo)
 
         panelAgregar.add(new JLabel("Usuario:"));
         panelAgregar.add(comboUsuarios);
-        panelAgregar.add(new JLabel("Tarea:"));
+        panelAgregar.add(new JLabel("Tarea (Solo Inactivas):"));
         panelAgregar.add(comboTareas);
-        panelAgregar.add(new JLabel("Hogar"));
+        panelAgregar.add(new JLabel("Hogar:"));
         panelAgregar.add(comboHogar);
         panelAgregar.add(new JLabel("Fecha Asignación (YYYY-MM-DD):"));
         panelAgregar.add(campoFechaAsignacion);
         panelAgregar.add(new JLabel("Fecha Realización (YYYY-MM-DD):"));
         panelAgregar.add(campoFechaRealizacion);
-        //panelAgregar.add(new JLabel("Estado:"));
-        //panelAgregar.add(comboEstado);
-        panelAgregar.add(new JLabel("")); // Espacio
+        panelAgregar.add(new JLabel("Estado Asignación:")); // <-- Re-habilitado
+        panelAgregar.add(comboEstado); // <-- Re-habilitado
+        panelAgregar.add(new JLabel("")); 
         panelAgregar.add(botonAgregar);
 
-        cargarCombos(); // Cargar usuarios y tareas en los ComboBox
+        cargarCombos(); // Carga Usuarios, Tareas Y HOGARES
 
         // --- Área para mostrar la lista ---
         areaAsignaciones = new JTextArea();
         areaAsignaciones.setEditable(false);
-        areaAsignaciones.setMargin(new Insets(10, 10, 10, 10)); // Margen
+        areaAsignaciones.setMargin(new Insets(10, 10, 10, 10)); 
         JScrollPane scrollLista = new JScrollPane(areaAsignaciones);
 
-        // --- Botón de actualización ---
         JButton botonActualizar = new JButton("Actualizar Lista");
 
-        add(panelAgregar, BorderLayout.NORTH);
-        add(scrollLista, BorderLayout.CENTER);
         JPanel panelAcciones = new JPanel (new BorderLayout(10,10));
-        
-        //Panel para eliminar 
-
         JPanel panelEliminar = new JPanel(new FlowLayout(FlowLayout.LEFT));
         panelEliminar.setBorder(BorderFactory.createTitledBorder("Eliminar Asignacion por ID:"));
         campoIdEliminar = new JTextField(5);
@@ -91,62 +83,59 @@ public class VentanaAsignacion extends JPanel {
         panelEliminar.add(new JLabel("ID Asignacion"));
         panelEliminar.add(campoIdEliminar);
         panelEliminar.add(botonEliminar);
-
-        // se añade el panel eliminar y de actualizar al de acciones
         panelAcciones.add(panelEliminar,BorderLayout.CENTER);
         panelAcciones.add(botonActualizar,BorderLayout.EAST);
 
-        // Añadir el panel al sur
+        add(panelAgregar, BorderLayout.NORTH);
+        add(scrollLista, BorderLayout.CENTER);
         add(panelAcciones, BorderLayout.SOUTH);
-// --- Lógica de los botones ---
+
+        // --- Lógica de los botones ---
         botonAgregar.addActionListener(e -> {
             String usuarioSeleccionado = (String) comboUsuarios.getSelectedItem();
             String tareaSeleccionada = (String) comboTareas.getSelectedItem();
             String hogarSeleccionado = (String) comboHogar.getSelectedItem();
             String fechaAsignacionStr = campoFechaAsignacion.getText();
             String fechaRealizacionStr = campoFechaRealizacion.getText();
-            
-            // --- CAMBIO 1: La validación estaba incompleta ---
-            //String estado = (String) comboEstado.getSelectedItem(); // Obtener el estado
-            if (usuarioSeleccionado == null || tareaSeleccionada == null || hogarSeleccionado == null ||fechaAsignacionStr.isEmpty()  || usuarioSeleccionado.equals("Seleccionar...") || tareaSeleccionada.equals("Seleccionar...")) {
-                JOptionPane.showMessageDialog(this, "Usuario, Tarea,hogar; Fecha Asignación y Estado son obligatorios.", "Error", JOptionPane.ERROR_MESSAGE);
+            String estado = (String) comboEstado.getSelectedItem(); // <-- Re-habilitado
+
+            // Validación corregida
+            if (usuarioSeleccionado == null || tareaSeleccionada == null || hogarSeleccionado == null || fechaAsignacionStr.isEmpty()  || usuarioSeleccionado.equals("Seleccionar...") || tareaSeleccionada.equals("Seleccionar...") || hogarSeleccionado.equals("Seleccionar...")) {
+                JOptionPane.showMessageDialog(this, "Usuario, Tarea, Hogar y Fecha Asignación son obligatorios.", "Error", JOptionPane.ERROR_MESSAGE);
                 return;
             }
 
             try {
-                int idUsuario = Integer.parseInt(usuarioSeleccionado.split(" - ")[0]); // Extraer ID
-                int idTarea = Integer.parseInt(tareaSeleccionada.split(" - ")[0]);     // Extraer ID
-                int idHogar = Integer.parseInt(hogarSeleccionado.split("-")[0]);
+                int idUsuario = Integer.parseInt(usuarioSeleccionado.split(" - ")[0]);
+                int idTarea = Integer.parseInt(tareaSeleccionada.split(" - ")[0]);    
+                int idHogar = Integer.parseInt(hogarSeleccionado.split(" - ")[0]); // <-- CAMBIO: Corregido el split
+                
                 SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-                sdf.setLenient(false); // No permitir fechas inválidas
-                // String estado = (String) comboEstado.getSelectedItem(); // (Movido arriba para validación)
+                sdf.setLenient(false); 
                 Date fechaAsignacionSQL = new Date(sdf.parse(fechaAsignacionStr).getTime());
                 Date fechaRealizacionSQL = null;
                 if (fechaRealizacionStr != null && !fechaRealizacionStr.isEmpty() && !fechaRealizacionStr.contains("opcional")) {
                     fechaRealizacionSQL = new Date(sdf.parse(fechaRealizacionStr).getTime());
                 }
                 
-                Asignacion nuevaAsignacion = new Asignacion(0, idUsuario, idTarea,idHogar,fechaAsignacionSQL, fechaRealizacionSQL, "Activa");
-                asignacionDao.agregarAsignacion(nuevaAsignacion); // Asumo que el DAO ya está corregido
+                // Asumo que tu Asignacion.java y AsignacionDao.java ya están correctos
+                Asignacion nuevaAsignacion = new Asignacion(0, idUsuario, idTarea, idHogar, fechaAsignacionSQL, fechaRealizacionSQL, estado);
+                asignacionDao.agregarAsignacion(nuevaAsignacion); 
 
-                // --- CAMBIO 2: Corregido el nombre del método que crasheaba ---
-                // (De 'actualizarEstadoTarea' a 'actualizarEstado')
+                // (Mantengo el nombre de tu método)
                 tareasDao.actualizarEstadoTarea(idTarea, true); // Pone la TAREA como "Activa"
 
                 JOptionPane.showMessageDialog(this, "Asignación agregada y Tarea marcada como 'Activa'.");
                 
                 campoFechaAsignacion.setText("YYYY-MM-DD");
                 campoFechaRealizacion.setText("YYYY-MM-DD (opcional)");
-                
-                // --- CAMBIO 3: Lógica de reseteo de comboEstado ---
-                // (Asumiendo que las opciones son "Pendiente"/"Completada", no "Activa")
-                //comboEstado.setSelectedItem("Pendiente"); 
+                comboEstado.setSelectedItem("Pendiente"); // <-- Re-habilitado
                 
                 cargarCombos(); 
                 actualizarListaAsignaciones();
 
             } catch (NumberFormatException ex) {
-                JOptionPane.showMessageDialog(this, "Error al obtener ID de usuario o tarea.", "Error", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(this, "Error al obtener ID de usuario, tarea u hogar.", "Error", JOptionPane.ERROR_MESSAGE);
             } catch (ParseException ex) {
                 JOptionPane.showMessageDialog(this, "Formato de fecha incorrecto. Usa YYYY-MM-DD.", "Error", JOptionPane.ERROR_MESSAGE);
             } catch (Exception ex) { 
@@ -155,9 +144,7 @@ public class VentanaAsignacion extends JPanel {
             }
         });
 
-        // --- CAMBIO 4: LÓGICA PARA EL BOTÓN ELIMINAR (AÑADIDA) ---
-        // (Esto asume que declaraste 'botonEliminar' y 'campoIdEliminar' en el constructor)
-        // --- LÓGICA DEL BOTÓN ELIMINAR (Actualizada) ---
+        // --- Lógica del botón Eliminar (con reactivación de tarea) ---
         botonEliminar.addActionListener(e -> {
             String idStr = campoIdEliminar.getText();
             if (idStr.isEmpty()) {
@@ -167,22 +154,14 @@ public class VentanaAsignacion extends JPanel {
             
             try {
                 int idAsignacion = Integer.parseInt(idStr);
-
-                // --- LÓGICA AÑADIDA ---
-                // 1. Buscar la asignación ANTES de borrarla (usando el método del Paso 1)
                 Asignacion asignacion = asignacionDao.buscarAsignacionPorId(idAsignacion);
 
-                // Verificar si se encontró la asignación
                 if (asignacion == null) {
                     JOptionPane.showMessageDialog(this, "No se encontró ninguna asignación con el ID " + idAsignacion, "Error", JOptionPane.ERROR_MESSAGE);
                     return;
                 }
                 
-                // 2. Guardamos el ID de la tarea que vamos a reactivar
                 int idTareaAReactivar = asignacion.getid_tarea();
-                // --- FIN LÓGICA AÑADIDA ---
-
-                // 3. Pedir confirmación (ahora mostrando qué tarea se reactivará)
                 int confirmacion = JOptionPane.showConfirmDialog(this,
                         "¿Estás seguro de que deseas eliminar la asignación con ID " + idAsignacion + "?\n" +
                         "La Tarea asociada (ID: " + idTareaAReactivar + ") volverá a estar 'Inactiva'.",
@@ -190,24 +169,21 @@ public class VentanaAsignacion extends JPanel {
                         JOptionPane.YES_NO_OPTION);
 
                 if (confirmacion == JOptionPane.YES_OPTION) {
-                    
-                    // 4. Eliminar la asignación
                     asignacionDao.eliminarAsignacion(idAsignacion);
                     
-                    tareasDao.actualizarEstadoTarea(idTareaAReactivar, false);
+                    // (Mantengo el nombre de tu método)
+                    tareasDao.actualizarEstadoTarea(idTareaAReactivar, false); 
 
                     JOptionPane.showMessageDialog(this, "Asignación eliminada. Tarea marcada como 'Inactiva'.");
                     campoIdEliminar.setText("");
                     
-                    // 6. Recargamos ambas listas
                     actualizarListaAsignaciones();
-                    cargarCombos(); // Para que la tarea aparezca de nuevo en la lista
+                    cargarCombos(); 
                 }
             } catch (NumberFormatException ex) {
                 JOptionPane.showMessageDialog(this, "El ID debe ser un número entero.", "Error de Formato", JOptionPane.ERROR_MESSAGE);
             }
         });
-        // --- FIN DEL CAMBIO 4 ---
 
         botonActualizar.addActionListener(e -> {
              cargarCombos(); 
@@ -220,6 +196,7 @@ public class VentanaAsignacion extends JPanel {
      private void cargarCombos() {
         comboUsuarios.removeAllItems(); 
         comboTareas.removeAllItems();
+        comboHogar.removeAllItems(); // <-- CAMBIO: Limpiar comboHogar
 
         comboUsuarios.addItem("Seleccionar...");
         List<Usuario> usuarios = usuarioDao.listaRUsuarios();
@@ -230,11 +207,16 @@ public class VentanaAsignacion extends JPanel {
         comboTareas.addItem("Seleccionar...");
         List<Tareas> tareas = tareasDao.listaRTarea();
         for (Tareas t : tareas) {
-             // --- CAMBIO 5: Lógica corregida para evitar duplicados ---
-             // (De 't.isestado()' a '!t.isestado()')
              if (!t.isestado()) { // Solo mostrar tareas INACTIVAS (estado == false)
                 comboTareas.addItem(t.getid_tarea() + " - " + t.getnombre());
              }
+        }
+        
+        // --- CAMBIO: Lógica para cargar hogares (AÑADIDA) ---
+        comboHogar.addItem("Seleccionar...");
+        List<Hogar> hogares = hogarDao.listaRHogar();
+        for (Hogar h : hogares) {
+            comboHogar.addItem(h.getIdHogar() + " - " + h.getNombre());
         }
      }
 
@@ -245,17 +227,18 @@ public class VentanaAsignacion extends JPanel {
         if (lista.isEmpty()) {
              areaAsignaciones.setText("No hay asignaciones registradas.");
         } else {
-             SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy"); // Formato más legible
+             SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy"); 
              for (Asignacion a : lista) {
                  String fechaAsigStr = (a.getfecha_asignacion() != null) ? sdf.format(a.getfecha_asignacion()) : "N/A";
                  String fechaRealStr = (a.getfecha_realizacion() != null) ? sdf.format(a.getfecha_realizacion()) : "Pendiente";
 
-                 // Sería ideal obtener nombres de usuario/tarea en lugar de IDs (requiere JOINS en el DAO o búsquedas adicionales)
+                 // --- CAMBIO: Añadido 'getid_hogar()' ---
                  areaAsignaciones.append("ID: " + a.getid_asignacion() +
                                        " | Usuario ID: " + a.getid_usuario() +
-                                       " | Tarea ID: " + a.getid_tarea() + "\n");
+                                       " | Tarea ID: " + a.getid_tarea() +
+                                       " | Hogar ID: " + a.getid_hogar() + "\n");
                  areaAsignaciones.append("  Asignada: " + fechaAsigStr +
-                                       " | Realizada: " + fechaRealStr +
+                                       " | Realización: " + fechaRealStr +
                                        " | Estado: " + a.getestado() + "\n\n");
              }
         }
