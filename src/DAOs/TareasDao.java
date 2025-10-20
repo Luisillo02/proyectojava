@@ -1,9 +1,9 @@
 package DAOs;
 
+import Modelos.Tareas;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
-import Modelos.Tareas;
 
 
 public class TareasDao{
@@ -82,6 +82,21 @@ public class TareasDao{
             ps.setInt(1, id);
             ps.executeUpdate();
             System.out.println("Tarea eliminada correctamente");
+        } catch (SQLException e) {
+            System.err.println("Error: " + e.getMessage());
+         }
+    }
+
+    // Creo un nuevo metodo para Actualizar el estado desde Asignacion 
+
+    public void actualizarEstadoTarea(int id_tarea, boolean estado){
+        String sql = "UPDATE tarea SET estado = ? WHERE id_tarea = ?";
+        try(Connection conn = ConectorBD.getConnection();
+         PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setBoolean(1, estado);
+            ps.setInt(2, id_tarea);
+            ps.executeUpdate();
+            System.out.println("Estado (Activa/Inactiva) de la tarea " + id_tarea + " actualizado.");
         } catch (SQLException e) {
             System.err.println("Error: " + e.getMessage());
          }

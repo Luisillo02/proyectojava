@@ -1,7 +1,8 @@
-import javax.swing.*;
-import Ventanas.VentanaUsuario;
-import Ventanas.VentanaTareas;
+import Ventanas.VentanaAsignacion;
 import Ventanas.VentanaHogar;
+import Ventanas.VentanaTareas;
+import Ventanas.VentanaUsuario;
+import javax.swing.*;
 public class AppPrincipal {
 
     public static void main(String[] args) {
@@ -21,16 +22,17 @@ public class AppPrincipal {
             VentanaUsuario panelUsuarios = new VentanaUsuario();
             VentanaTareas panelTareas = new VentanaTareas();
             VentanaHogar panelHogar = new VentanaHogar();
-           //VentanaAsignacion panelAsignacion = new VentanaAsignacion();
-           // VentanaInformes panelInformes = new VentanaInformes();
+            VentanaAsignacion panelAsignacion = new VentanaAsignacion();
+            Ventanas.VentanaInformes panelInformes = new Ventanas.VentanaInformes();
+            
 
 
             // 4. Añadir cada panel como una pestaña
             pestanas.addTab("👥 Usuarios", panelUsuarios); // Pestaña añadida
             pestanas.addTab("✔️ Tareas", panelTareas);
             pestanas.addTab("🏠 Hogar", panelHogar);
-           // pestanas.addTab("📝 Asignaciones", panelAsignacion); // Pestaña añadida
-          //  pestanas.addTab("📊 Informes", panelInformes); // Pestaña añadida
+            pestanas.addTab("📝 Asignaciones", panelAsignacion); // Pestaña añadida
+            pestanas.addTab("📊 Informes", panelInformes); // Pestaña añadida
 
 
             // 5. Añadir el panel de pestañas a la ventana principal

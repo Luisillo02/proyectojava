@@ -76,7 +76,7 @@ public class VentanaTareas extends JPanel {
             String nombre = campoNombre.getText();
             String descripcion = campoDescripcion.getText();
             String frecuencia = (String) comboFrecuencia.getSelectedItem();
-            boolean estado = checkEstado.isSelected();
+            boolean estado = false;
 
             if (nombre.isEmpty() || descripcion.isEmpty() || frecuencia.isEmpty()) {
                 JOptionPane.showMessageDialog(this, "Por favor, completa Nombre, Descripción y Frecuencia.", "Error", JOptionPane.ERROR_MESSAGE);
@@ -131,8 +131,8 @@ public class VentanaTareas extends JPanel {
              areaTareas.setText("No hay tareas registradas.");
          } else {
             for (Tareas t : lista) {
-                String estadoStr = t.isestado() ? "Activa" : "Inactiva";
-                areaTareas.append("ID: " + t.getid_tarea() + " - " + t.getnombre() + " (" + t.getfrecuencia() + ") - Estado: " + estadoStr + "\n");
+                //String estadoStr = t.isestado() ? "Activa" : "Inactiva";
+                areaTareas.append("ID: " + t.getid_tarea() + " - " + t.getnombre() + " (" + t.getfrecuencia() + ") "  + "\n");
                 areaTareas.append("  Descripción: " + t.getdescripcion() + "\n\n");
             }
          }

@@ -10,7 +10,9 @@ public class Tareas {
     private boolean estado;
 
 // Constructor de la clase tareas
-public Tareas() {}
+public Tareas() {
+    this.estado = false;
+}
 
 
 // Constructor con Parametros

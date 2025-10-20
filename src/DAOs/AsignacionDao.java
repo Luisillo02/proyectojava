@@ -7,7 +7,7 @@ import java.util.List;
 public class AsignacionDao {
     // CREATE - agregar asignacion
     public void agregarAsignacion(Asignacion asignacion) {
-        String sql = "INSERT INTO asignacion(id_usuario, id_tarea, fecha_asignacion, fecha_realizacion,estado ) VALUES(?, ?, ?, ?, ?,)";
+        String sql = "INSERT INTO asignacion(id_usuario, id_tarea, fecha_asignacion, fecha_realizacion,estado ) VALUES(?,?,?,?,?)";
         try (Connection conn = ConectorBD.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
 
