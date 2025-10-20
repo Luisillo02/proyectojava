@@ -23,7 +23,7 @@ public class AppPrincipal {
             VentanaTareas panelTareas = new VentanaTareas();
             VentanaHogar panelHogar = new VentanaHogar();
             VentanaAsignacion panelAsignacion = new VentanaAsignacion();
-            Ventanas.VentanaInformes panelInformes = new Ventanas.VentanaInformes();
+            
             
 
 
@@ -32,9 +32,6 @@ public class AppPrincipal {
             pestanas.addTab("✔️ Tareas", panelTareas);
             pestanas.addTab("🏠 Hogar", panelHogar);
             pestanas.addTab("📝 Asignaciones", panelAsignacion); // Pestaña añadida
-            pestanas.addTab("📊 Informes", panelInformes); // Pestaña añadida
-
-
             // 5. Añadir el panel de pestañas a la ventana principal
             ventana.add(pestanas);
 
