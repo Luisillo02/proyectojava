@@ -19,14 +19,14 @@ public class VentanaAsignacion extends JPanel {
     private AsignacionDao asignacionDao = new AsignacionDao();
     private UsuarioDao usuarioDao = new UsuarioDao();
     private TareasDao tareasDao = new TareasDao();
-    private HogarDao hogarDao = new HogarDao(); // DAO de Hogar
+    private HogarDao hogarDao = new HogarDao(); 
     private JTextArea areaAsignaciones;
     private JComboBox<String> comboUsuarios; 
     private JComboBox<String> comboTareas;   
-    private JComboBox<String> comboHogar;    // Combo de Hogar
+    private JComboBox<String> comboHogar;  
     private JTextField campoFechaAsignacion; 
     private JTextField campoFechaRealizacion; 
-    private JComboBox<String> comboEstado; // <-- CAMBIO: Re-habilitado (es necesario)
+    private JComboBox<String> comboEstado; 
     private JTextField campoIdEliminar;
     
     public VentanaAsignacion() {
@@ -43,7 +43,6 @@ public class VentanaAsignacion extends JPanel {
         campoFechaAsignacion = new JTextField("YYYY-MM-DD"); 
         campoFechaRealizacion = new JTextField("YYYY-MM-DD (opcional)"); 
 
-        // --- CAMBIO: Lógica de Estado (re-habilitada) ---
         // El estado de una ASIGNACIÓN es "Pendiente" o "Completada"
         String [] opcionesEstado = {"Pendiente","Completada"};
         comboEstado = new JComboBox<>(opcionesEstado);
@@ -108,7 +107,7 @@ public class VentanaAsignacion extends JPanel {
             try {
                 int idUsuario = Integer.parseInt(usuarioSeleccionado.split(" - ")[0]);
                 int idTarea = Integer.parseInt(tareaSeleccionada.split(" - ")[0]);    
-                int idHogar = Integer.parseInt(hogarSeleccionado.split(" - ")[0]); // <-- CAMBIO: Corregido el split
+                int idHogar = Integer.parseInt(hogarSeleccionado.split(" - ")[0]); // 
                 
                 SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
                 sdf.setLenient(false); 
@@ -123,7 +122,7 @@ public class VentanaAsignacion extends JPanel {
                 asignacionDao.agregarAsignacion(nuevaAsignacion); 
 
                 // (Mantengo el nombre de tu método)
-                tareasDao.actualizarEstadoTarea(idTarea, true); // Pone la TAREA como "Activa"
+                tareasDao.actualizarEstadoTareaAsignaciones(idTarea, true); // Pone la TAREA como "Activa"
 
                 JOptionPane.showMessageDialog(this, "Asignación agregada y Tarea marcada como 'Activa'.");
                 
@@ -172,7 +171,7 @@ public class VentanaAsignacion extends JPanel {
                     asignacionDao.eliminarAsignacion(idAsignacion);
                     
                     // (Mantengo el nombre de tu método)
-                    tareasDao.actualizarEstadoTarea(idTareaAReactivar, false); 
+                    tareasDao.actualizarEstadoTareaAsignaciones(idTareaAReactivar, false);
 
                     JOptionPane.showMessageDialog(this, "Asignación eliminada. Tarea marcada como 'Inactiva'.");
                     campoIdEliminar.setText("");
@@ -196,7 +195,7 @@ public class VentanaAsignacion extends JPanel {
      private void cargarCombos() {
         comboUsuarios.removeAllItems(); 
         comboTareas.removeAllItems();
-        comboHogar.removeAllItems(); // <-- CAMBIO: Limpiar comboHogar
+        comboHogar.removeAllItems(); 
 
         comboUsuarios.addItem("Seleccionar...");
         List<Usuario> usuarios = usuarioDao.listaRUsuarios();
@@ -212,7 +211,7 @@ public class VentanaAsignacion extends JPanel {
              }
         }
         
-        // --- CAMBIO: Lógica para cargar hogares (AÑADIDA) ---
+        
         comboHogar.addItem("Seleccionar...");
         List<Hogar> hogares = hogarDao.listaRHogar();
         for (Hogar h : hogares) {
@@ -220,7 +219,7 @@ public class VentanaAsignacion extends JPanel {
         }
      }
 
-
+    
     private void actualizarListaAsignaciones() {
         areaAsignaciones.setText("");
         List<Asignacion> lista = asignacionDao.listaRAsignacion();
@@ -232,7 +231,7 @@ public class VentanaAsignacion extends JPanel {
                  String fechaAsigStr = (a.getfecha_asignacion() != null) ? sdf.format(a.getfecha_asignacion()) : "N/A";
                  String fechaRealStr = (a.getfecha_realizacion() != null) ? sdf.format(a.getfecha_realizacion()) : "Pendiente";
 
-                 // --- CAMBIO: Añadido 'getid_hogar()' ---
+                 
                  areaAsignaciones.append("ID: " + a.getid_asignacion() +
                                        " | Usuario ID: " + a.getid_usuario() +
                                        " | Tarea ID: " + a.getid_tarea() +

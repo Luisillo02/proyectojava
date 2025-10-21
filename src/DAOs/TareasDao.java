@@ -86,10 +86,8 @@ public class TareasDao{
             System.err.println("Error: " + e.getMessage());
          }
     }
-
     // Creo un nuevo metodo para Actualizar el estado desde Asignacion 
-
-    public void actualizarEstadoTarea(int id_tarea, boolean estado){
+    public void actualizarEstadoTareaAsignaciones(int id_tarea, boolean estado){
         String sql = "UPDATE tarea SET estado = ? WHERE id_tarea = ?";
         try(Connection conn = ConectorBD.getConnection();
          PreparedStatement ps = conn.prepareStatement(sql)) {

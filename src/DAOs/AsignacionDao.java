@@ -1,6 +1,7 @@
 package DAOs;
 import Modelos.Asignacion;
 import java.sql.*;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,10 +18,6 @@ public class AsignacionDao {
             ps.setDate(4, asignacion.getfecha_asignacion());
             ps.setDate(5, asignacion.getfecha_realizacion());
             ps.setString(6, asignacion.getestado());
-
-            
-
-
             ps.executeUpdate();
             System.out.println("Asignacion agregada");
 
@@ -77,6 +74,7 @@ public class AsignacionDao {
         } catch (SQLException e) {
             System.err.println("Error: " + e.getMessage());
         }
+        
     // DELETE - eliminar asignacion
     } public void eliminarAsignacion(int id_asignacion) {
         String sql = "DELETE FROM asignacion WHERE id_asignacion = ?";
@@ -89,8 +87,6 @@ public class AsignacionDao {
             System.err.println("Error: " + e.getMessage());
         }
     }
-    // --- MÉTODO NUEVO: Para buscar una asignación por su ID ---
-    // (Este método es necesario para el botón Eliminar)
     public Asignacion buscarAsignacionPorId(int idAsignacion) {
         String sql = "SELECT * FROM asignacion WHERE id_asignacion = ?";
         try (Connection conn = ConectorBD.getConnection();
@@ -117,5 +113,5 @@ public class AsignacionDao {
             System.err.println("Error al buscar asignación: " + e.getMessage());
         }
         return null; // No se encontró
-    }
+    }    
 }
